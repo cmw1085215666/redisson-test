@@ -25,12 +25,10 @@ public class testApi {
 
         String name = Thread.currentThread().getName();
         String uuid = "uuid";
-//        RLock lock = redissonClient.getLock(uuid);
         boolean res=false;
         try {
             System.out.println(name + "  start tryLook..." + DateUtil.now());
-            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, 10);
-//            res = lock.tryLock(10, 10, TimeUnit.SECONDS);
+            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, 5);
             if(res){
                 System.out.println(name + " getLook..... " + DateUtil.now());
                 Thread.sleep(5000);
@@ -41,11 +39,8 @@ public class testApi {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//            boolean locked = lock.isLocked();
-//            System.out.println(locked);
             if(res ){//释放锁
                 RedissLockUtil.unlock(uuid);
-//                lock.unlock();
             }
         }
 
