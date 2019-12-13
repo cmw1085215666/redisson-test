@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import com.cmw.util.RedissLockUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.redisson.Redisson;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,9 +127,9 @@ public class testRedisson {
         try {
             System.out.println(name + "  start tryLook..." + DateUtil.now());
 //            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, 5);
-            res = lock.tryLock(10, 10, TimeUnit.SECONDS);
+            res = lock.tryLock(10, 35, TimeUnit.SECONDS);
             if(res){
-                Thread.sleep(5000);
+                Thread.sleep(50000);
                 System.out.println(name + "  doing somthing ......" + DateUtil.now());
             }else{
                 System.out.println(name + "  tryLock failure ......");
@@ -145,5 +146,10 @@ public class testRedisson {
         }
 
     }
+
+    public void testStor(){
+
+    }
+
 
 }

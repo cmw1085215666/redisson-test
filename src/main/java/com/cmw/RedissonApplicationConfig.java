@@ -55,6 +55,7 @@ public class RedissonApplicationConfig {
     RedissonClient redissonSingle() {
         //TODO  配置待完善
         Config config = new Config();
+        config.setLockWatchdogTimeout(10000);
         SingleServerConfig serverConfig = config.useSingleServer().setPingConnectionInterval(60)
                 .setAddress(redssionProperties.getAddress());
         if(StrUtil.isNotBlank(redssionProperties.getPassword())) {

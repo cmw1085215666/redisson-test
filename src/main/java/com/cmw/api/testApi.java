@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,10 +29,10 @@ public class testApi {
         boolean res=false;
         try {
             System.out.println(name + "  start tryLook..." + DateUtil.now());
-            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, 5);
+            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, -1);
             if(res){
                 System.out.println(name + " getLook..... " + DateUtil.now());
-                Thread.sleep(5000);
+                Thread.sleep(10000);
                 System.out.println(name + "  doing somthing ......" + DateUtil.now());
             }else{
                 System.out.println(name + "  tryLock failure ......");

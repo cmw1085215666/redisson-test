@@ -4,6 +4,9 @@
 #  password:
 #  sentinel-addresses: 10.47.91.83:26379,10.47.91.83:26380,10.47.91.83:26381
 
+
 redisson:
   address: redis://127.0.0.1:6379
   password:
+server:
+  port: 8090
