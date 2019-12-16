@@ -51,20 +51,48 @@ public class testApi {
     }
 
     @RequestMapping("/test1")
-    @RedissonLockAnnotation(lockKey = "testApi1",waitTimeout = 5000)
+//    @RedissonLockAnnotation(lockKey = "testApi1",waitTimeout = 5000)
     public String testApi1(){
+        boolean testApi1 = false;
+        try{
+            testApi1 = RedissLockUtil.tryLock("testApi1", 5000, -1);
+            if (testApi1){
 
+                System.out.println(Thread.currentThread().getName() + " getLook..... " + DateUtil.now());
+
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(Thread.currentThread().getName() + "  doing somthing ......" + DateUtil.now());
+            }else {
+                System.out.println(Thread.currentThread().getName() + "!!!!!!!!!!!!!!!!!" + DateUtil.now());
+            }
+
+        }finally {
+            if (testApi1){
+                RedissLockUtil.unlock("testApi1");
+            }
+        }
+
+        return "hello world";
+    }
+
+    @RequestMapping("/test2")
+    @RedissonLockAnnotation(lockKey = "test2",waitTimeout = 5000)
+    public String testApi2(){
+
+        System.out.println(Thread.currentThread().getName() + " getLook..... " + DateUtil.now());
 
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println( "  doing somthing ......" + DateUtil.now());
+        System.out.println(Thread.currentThread().getName() + "  doing somthing ......" + DateUtil.now());
 
 
         return "hello world";
     }
-
-
 }

@@ -26,6 +26,7 @@ public class RedissLockUtil {
     public static RLock lock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
         lock.lock();
+        System.out.println("lock key -- " + lockKey);
         return lock;
     }
 
@@ -36,7 +37,14 @@ public class RedissLockUtil {
      */
     public static void unlock(String lockKey) {
         RLock lock = redissonClient.getLock(lockKey);
-        lock.unlock();
+        boolean locked = lock.isLocked();
+        System.out.println(lock+Thread.currentThread().getName() +"~~~~~~~~~~~"+ locked);
+        if (locked){
+            lock.unlock();
+        }else {
+            System.out.println("lock 无效的key："+lock.getName());
+        }
+
     }
 
     /**
@@ -45,7 +53,11 @@ public class RedissLockUtil {
      * @param lock
      */
     public static void unlock(RLock lock) {
-        lock.unlock();
+        if (lock.isLocked()){
+            lock.unlock();
+        }else {
+            System.out.println("lock 无效的key："+lock.getName());
+        }
     }
 
     /**
@@ -56,7 +68,8 @@ public class RedissLockUtil {
      */
     public static RLock lock(String lockKey, int timeout) {
         RLock lock = redissonClient.getLock(lockKey);
-        lock.lock(timeout, TimeUnit.SECONDS);
+        lock.lock(timeout, TimeUnit.MILLISECONDS);
+        System.out.println("lock key -- " + lockKey);
         return lock;
     }
 
@@ -70,6 +83,7 @@ public class RedissLockUtil {
     public static RLock lock(String lockKey, TimeUnit unit, int timeout) {
         RLock lock = redissonClient.getLock(lockKey);
         lock.lock(timeout, unit);
+        System.out.println("lock key -- " + lockKey);
         return lock;
     }
 
@@ -84,7 +98,8 @@ public class RedissLockUtil {
     public static boolean tryLock(String lockKey, int waitTime, int leaseTime) {
         RLock lock = redissonClient.getLock(lockKey);
         try {
-            return lock.tryLock(waitTime, leaseTime, TimeUnit.SECONDS);
+            System.out.println("lock key -- " + lockKey);
+            return lock.tryLock(waitTime, leaseTime, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             return false;
         }
@@ -102,6 +117,7 @@ public class RedissLockUtil {
     public static boolean tryLock(String lockKey, TimeUnit unit, int waitTime, int leaseTime) {
         RLock lock = redissonClient.getLock(lockKey);
         try {
+            System.out.println("lock key -- " + lockKey);
             return lock.tryLock(waitTime, leaseTime, unit);
         } catch (InterruptedException e) {
             return false;
