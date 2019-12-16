@@ -1,6 +1,7 @@
 package com.cmw.api;
 
 import cn.hutool.core.date.DateUtil;
+import com.cmw.annotation.RedissonLockAnnotation;
 import com.cmw.util.RedissLockUtil;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -29,7 +30,8 @@ public class testApi {
         boolean res=false;
         try {
             System.out.println(name + "  start tryLook..." + DateUtil.now());
-            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 10, -1);
+//            res = RedissLockUtil.lock(uuid/*, TimeUnit.SECONDS, 5*/).isLocked();
+            res = RedissLockUtil.tryLock(uuid, TimeUnit.SECONDS, 5,-1);
             if(res){
                 System.out.println(name + " getLook..... " + DateUtil.now());
                 Thread.sleep(10000);
@@ -47,5 +49,22 @@ public class testApi {
 
         return "hello world";
     }
+
+    @RequestMapping("/test1")
+    @RedissonLockAnnotation(lockKey = "testApi1",waitTimeout = 5000)
+    public String testApi1(){
+
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println( "  doing somthing ......" + DateUtil.now());
+
+
+        return "hello world";
+    }
+
 
 }
